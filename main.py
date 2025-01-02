@@ -1,9 +1,43 @@
 import pygame
+from player import Player
+from npc import NPC
+from map import Map
 
-# ªì©l¤Æ Pygame
+
 pygame.init()
 
-# ³]¸mµ¡¤f
+
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("ª±®a»P NPC ¾Ô°«¹CÀ¸")
+pygame.display.set_caption("ç©å®¶èˆ‡ NPC æˆ°é¬¥éŠæˆ²")
+
+# ä¸»éŠæˆ²å¾ªç’°
+def main():
+    clock = pygame.time.Clock()
+    running = True
+
+    player = Player()
+    npc = NPC()
+    game_map = Map()
+
+    while running:
+        screen.fill((0, 0, 0))  # å¡«å……èƒŒæ™¯è‰²
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.KEYDOWN:
+                game_map.handle_movement(event.key)
+
+        # æ›´æ–°èˆ‡ç¹ªè£½
+        game_map.draw(screen)
+        player.draw(screen)
+        npc.draw(screen)
+
+        pygame.display.flip()
+        clock.tick(60)  #é™åˆ¶ FPS
+
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
