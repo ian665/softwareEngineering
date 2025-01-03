@@ -1,8 +1,9 @@
 import pygame
 
 class Map:
-    def __init__(self):
+    def __init__(self, screen_width, screen_height):
         self.background = pygame.image.load("softwareEngineering/assets/images/map.png")
+        self.background = pygame.transform.scale(self.background, (screen_width, screen_height))
         self.player_position = [100, 100]
 
     def draw(self, screen):
