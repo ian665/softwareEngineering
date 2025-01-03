@@ -2,7 +2,6 @@ import pygame
 
 class Player:
     def __init__(self):
-<<<<<<< Updated upstream
         self.x, self.y = 50, 50
         try:
             self.image = pygame.image.load("softwareEngineering/assets/images/player.png")
@@ -15,10 +14,6 @@ class Player:
         self.x += dx
         self.y += dy
         print(f"Player position updated to: ({self.x}, {self.y})")
-=======
-        self.x, self.y = 100, 100
-        self.image = pygame.image.load("./assets/images/player.png")
->>>>>>> Stashed changes
 
     def draw(self, screen):
         screen.blit(self.image, (self.x, self.y))

@@ -2,7 +2,6 @@ import pygame
 import random
 
 class NPC:
-<<<<<<< Updated upstream
     def __init__(self, screen_width, screen_height, avoid_position):
         #隨機生成位置(不會再玩家目前位置)
         while True:
@@ -13,11 +12,6 @@ class NPC:
 
         self.image = pygame.image.load("softwareEngineering/assets/images/npc.png")
         self.image = pygame.transform.scale(self.image, (100, 100))
-=======
-    def __init__(self):
-        self.x, self.y = 300, 300
-        self.image = pygame.image.load("./assets/images/npc.png")
->>>>>>> Stashed changes
 
     def draw(self, screen):
         screen.blit(self.image, (self.x, self.y))
