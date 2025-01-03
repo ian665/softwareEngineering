@@ -5,6 +5,10 @@ class Map:
     def __init__(self, screen_width, screen_height):
         self.background = pygame.image.load("softwareEngineering/assets/images/map.png")
         self.background = pygame.transform.scale(self.background, (screen_width, screen_height))
+=======
+    def __init__(self):
+        self.background = pygame.image.load("./assets/images/map.png")
+>>>>>>> Stashed changes
         self.player_position = [100, 100]
 
     def draw(self, screen):
