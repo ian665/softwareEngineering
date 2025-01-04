@@ -2,6 +2,8 @@ import pygame
 from player import Player
 from npc import NPC
 from map import Map
+from inventory import Inventory
+from battle_system import BattleSystem
 import random
 
 pygame.init()
@@ -45,9 +47,12 @@ def main():
     clock = pygame.time.Clock()
     running = True
     game_started = False  #判斷是否進入遊戲
-
+    inventory_open = False  #資源畫面是否打開
+    message_displaying = False  #是否正在顯示訊息
     player = Player()
     game_map = Map(SCREEN_WIDTH, SCREEN_HEIGHT)
+    inventory = Inventory()
+    battle_system = BattleSystem(inventory)
 
     #初始化NPC
     npcs = generate_npcs(random.randint(2, 8), (player.x, player.y))
@@ -60,9 +65,17 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-            if not game_started:  #顯示遊戲規則
+            if not game_started:  #遊戲規則
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                     game_started = True
+            elif inventory_open:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    inventory_open = False
+                    pygame.key.set_repeat(1, 50) #啟用按鍵重複
+            elif message_displaying:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                    message_displaying = False
+                    pygame.key.set_repeat(1, 50)  #啟用按鍵重複
             else:
                 if event.type == pygame.KEYDOWN:
                     if event.key in (pygame.K_UP, pygame.K_w):  #向上
@@ -73,16 +86,29 @@ def main():
                         player.move(-10, 0)
                     elif event.key in (pygame.K_RIGHT, pygame.K_d):  #向右
                         player.move(10, 0)
+                    elif event.key == pygame.K_b:  #打開資源畫面
+                        inventory_open = True
+                        pygame.key.set_repeat(0)  #禁用按鍵重複
 
         if not game_started:
             show_rules()
+        elif inventory_open:
+            inventory.show_inventory(screen, font)
+        elif message_displaying:
+            pygame.key.set_repeat(0)  #禁用按鍵重複
         else:
-            #確保玩家不移出邊界
+            #玩家不移出邊界
             player.x = max(0, min(SCREEN_WIDTH - 110, player.x))
             player.y = max(0, min(SCREEN_HEIGHT - 110, player.y))
 
-            #檢測玩家是否與NPC碰撞
-            npcs = [npc for npc in npcs if not npc.check_collision((player.x, player.y))]
+            remaining_npcs = []
+            for npc in npcs:
+                if npc.check_collision((player.x, player.y)):  #碰撞檢測
+                    message_displaying = battle_system.initiate_battle(screen, font)  #戰鬥
+                    pygame.key.set_repeat(0)  # 禁用按鍵重複並進入訊息顯示模式
+                else:
+                    remaining_npcs.append(npc)
+            npcs = remaining_npcs
 
             #所有NPC消失就重新隨機生成
             if not npcs:
@@ -94,12 +120,12 @@ def main():
             for npc in npcs:
                 npc.draw(screen)
 
-
             pygame.display.flip()
 
         clock.tick(60)
 
     pygame.quit()
+
 
 if __name__ == "__main__":
     main()
