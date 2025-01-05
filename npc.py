@@ -10,7 +10,7 @@ class NPC:
             if abs(self.x - avoid_position[0]) > 100 and abs(self.y - avoid_position[1]) > 100:
                 break
 
-        self.image = pygame.image.load("softwareEngineering/assets/images/npc.png")
+        self.image = pygame.image.load("./assets/images/npc.png")
         self.image = pygame.transform.scale(self.image, (100, 100))
 
     def draw(self, screen):
