@@ -10,7 +10,6 @@ def main():
 
     # 初始化主選單
     main_menu = MainMenu(screen)
-
     clock = pygame.time.Clock()
     running = True
 
